@@ -1,6 +1,6 @@
-# RetroPad — STL → STEP/STL via build123d
+# RetroPad: STL source to STEP/STL via build123d
 
-**Pipeline task** — convert original RetroPad case STL files to parametric-ready STEP/STL using Python CAD toolchain (OCP + build123d), with zero symmetric-difference volume.
+**Pipeline task**: convert original RetroPad case STL files to parametric-ready STEP/STL using Python CAD toolchain (OCP + build123d), with zero symmetric-difference volume.
 
 ---
 
