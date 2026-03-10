@@ -1,18 +1,18 @@
 # RetroPad: STL source to STEP/STL via build123d
 
-**Pipeline task**: convert original RetroPad case STL files to parametric-ready STEP/STL using Python CAD toolchain (OCP + build123d), with zero symmetric-difference volume.
+**Pipeline task**: convert original RetroPad case STL files to parametric ready STEP/STL using Python CAD toolchain (OCP + build123d), with zero symmetric-difference volume.
 
 ---
 
 ## What I Did
 
 ### The Problem
-Needed to take 4 mechanical parts from the [RetroPad](https://github.com/jtgans/RetroPad) open-source gamepad design (STL files) and produce matching STEP/STL outputs that:
+Needed to take 4 mechanical parts from the [RetroPad](https://github.com/jtgans/RetroPad) opensource gamepad design (STL files) and produce matching STEP/STL outputs that:
 - Have **zero volume difference** vs. the original
 - Are valid **closed solids** that build123d can manipulate
 - Are produced entirely in Python (no GUI tools)
 
-### What Didn't Work — Parametric Reconstruction
+### What Didn't Work: Parametric Reconstruction
 Our first approach was to reconstruct each part parametrically using build123d (lofts, extrusions, boolean ops). We spent several iterations analyzing the STL geometry via:
 - Cross-section slicing at key Z levels
 - Vertex analysis for wall thicknesses, radii, centres
@@ -20,7 +20,7 @@ Our first approach was to reconstruct each part parametrically using build123d (
 
 Best result: **0.558% volume error** on the bottom shell. Zero diff is fundamentally impossible this way — internal features (screw bosses, snap ribs, rounded corners) can't be exactly reverse-engineered from triangle meshes.
 
-### What Worked — OCP Sew+Solid Pipeline
+### What Worked: OCP Sew+Solid Pipeline
 
 **Key insight:** `StlAPI_Reader` returns a triangulated *shell*, not a solid. build123d sees `volume=0, solids=0`. The fix is to sew the triangles into a proper closed solid before exporting. This helps reduce the volumetric difference to zero.
 
@@ -73,7 +73,7 @@ Full roundtrip verified: STL → STEP → build123d → STEP → STL, all zero d
 
 Bottom shell, top shell, and d-pad positions are correct (parts already in assembly frame in original STLs).
 
-Button grid positions had to be manually updated since dynamic sources are **not yet verified**. The 4-button layout could be extracted if there was a source step file. I would have used OCP `TopExp_Explorer` filtering solids by volume ~1150 mm³.
+Button grid positions had to be manually updated since dynamic sources are **not yet verified**. The 4 button layout could be extracted if there was a source step file. I would have used OCP `TopExp_Explorer` filtering solids by volume ~1150 mm³.
 
 ---
 
